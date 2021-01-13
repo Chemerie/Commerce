@@ -1,0 +1,19 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Create List:</h2>
+    <div class="list-form">
+    	<form class="formit" action="{% url 'createlist' %}" method="post" >
+    	{% csrf_token %}
+    	{{form}}
+    	
+           	<input type="text" name="creator" value="{{ user.username }}" style="position: absolute; display: none;">     
+	
+        <input style="margin-left: 200px; " type="submit" name="" value="Submit">
+    	</form>
+ 
+    </div>
+    {{using}}
+ 
+
+{% endblock %}

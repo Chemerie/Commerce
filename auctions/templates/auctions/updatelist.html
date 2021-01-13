@@ -1,0 +1,107 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Listing: {{list_auction.title}}</h2>
+
+    	
+    	<div style="display: flex; margin: 10px; flex-direction: column;">
+    		<div style="width: 50%; background: blue;">
+
+    		{% if user.is_authenticated %}
+    			<div style="display: flex;">
+    			{% if list_auction.creator == user.username %}
+    				<form action="{% url 'closedbid' list_auction.id  %}">
+    					<input type="submit" name="" value="Close Bid" style="margin-right: 20px; background: rgb(100,250,100);">
+    				</form>
+    			{% endif %}
+                <form action="{% url 'whatchlist' list_auction.id %}" method="post">
+    		 		{% csrf_token %}
+    		 		<input type="submit" name="whatchlist" value="Watchlist" >
+    		 		</form>
+    			</div>
+            {% else %}
+                Sign in to add listing to Whatchlist.
+            {% endif %}
+
+    		 	<img src="{{list_auction.imgurl}}" width="100" height="100" alt="The Image" style="width: 30%; height: 300px; background: red; float: left;"></a>
+    		</div>
+
+    		 <div style="margin: 10px;">
+    		 	<p><strong></strong></p>
+    		 	<p>{{list_auction.description}}</p>
+    		 	<h2>${{max_bid}} </h2>
+    		 	{% if bids %}
+    		 	<p><strong>{{bids | length}}</strong> bid(s) so far. Your bid is the current bid.</p>
+    		 	{% endif %}
+    		 	
+    		{% if user.is_authenticated %}
+    			{% if message %}
+    				<p style="color: red;">Error!! {{message}}</p> 
+    			{% endif %}
+                <form action="{% url 'updatelist' list_auction.id %}" method="post">
+    		 		{% csrf_token %}
+    		 		{{form}}
+    		 		<input type="text" name="winner" value="{{ user.username }}" style="position: absolute; display: none;"> 
+    		 		<input type="submit" name="placebid" value="Place Bid" style="background: rgb(0,50,255); color: white">
+    		 		</form>
+    		
+            {% else %}
+                Sign in to palce bids.
+            {% endif %}
+
+    		 	
+    		 	<h3>Detailes</h3>
+    		 	<ul>
+    		 		<li>Listed by: <span style="color: blue;">{{list_auction.creator}}</span></li>
+    		 		{% if list_auction.case %}
+    		 			<li>Category: {{list_auction.case}}</li>
+    		 		{% else %}
+    		 			<li>No Category Listed</li>
+    		 		{% endif %}
+    		 	</ul>
+    		 	
+    		</div>
+
+    	</div>
+    	<div style="width: 100%; ">
+    		<div >
+    			{% for comment in comments %}
+    			<div style="margin-left: 50%">
+    				<div style="background: rgb(200,200,200);margin: 20px">
+    					<span style="color: red; font-weight: 800;">{{comment.commentor}}</span><br>
+    					<span style="font-size: 13px; font-weight: 600;">{{comment.comment}}</span>
+    				</div>
+    			
+    			</div>
+    		
+    			{% endfor %}
+    		</div>
+    		{% if user.is_authenticated %}
+    		<div style="margin-bottom: 50px">
+    			<div style="margin-right: 50%">
+    				<form action="{% url 'commenting' list_auction.id  %}" style="display: flex; flex-direction: column;" method="post">
+    						{% csrf_token %}
+    						{{form1}}
+    						<input type="text" name="commentor" value="{{ user.username }}" style="position: absolute; display: none;">	
+    						<input type="submit" name="" value="Post Comment">
+    				</form>
+    			</div>
+
+    		</div>
+    		 {% else %}
+    		 <div style="margin-bottom: 50px;">
+    		 	<span style="color: green; font-size: 20px;">Sign in to make and view comments on this listingO.</span>
+    		 </div>
+                
+            {% endif %}
+    		
+    	</div>
+
+
+    	
+   		
+    	   
+    
+
+	
+{% endblock %}

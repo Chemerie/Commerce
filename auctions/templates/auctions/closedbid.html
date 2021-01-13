@@ -1,0 +1,29 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Closed Bids </h2>
+
+    	{% for list in all_closed %}
+    		 	<div style="width: 30%; background: rgb(200, 200, 200); margin: 50px">
+                    {% if list.winner == user.username %}
+                        <h4 style="color: green;"><i>Congratulations!! You have won the bid</i> </h4>
+                    {% endif %}
+
+    		 	<div style="margin: 10px;">
+    		 		Title: <strong>{{list.title}}</strong><br>
+    		 		Description: {{list.description}}<br>
+    		 		Listed by: {{list.creator}}<br>
+    		 		Winner: {{list.winner}} 
+                    
+    		 	</div>
+             </div>
+
+    	{% endfor %}
+   		<!-- <div>
+
+    		<img src="" width="150" height="1501" alt=""> -->
+    	   
+    
+
+	
+{% endblock %}
